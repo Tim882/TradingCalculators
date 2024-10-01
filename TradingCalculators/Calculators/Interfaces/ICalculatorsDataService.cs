@@ -17,5 +17,11 @@ namespace TradingCalculators.Calculators.Interfaces
         /// <param name="takeAndStopResponse">Параметры для рассчета</param>
         /// <returns></returns>
         public TakeAndStopResponse CalculateTakeAndStop(TakeAndStopRequest takeAndStopRequest);
+        /// <summary>
+        /// Метод для расчета финансового результата по позиции
+        /// </summary>
+        /// <param name="positionTradingResultRequest"></param>
+        /// <returns></returns>
+        public PositionTradingResultResponse CalculatePositionTradingResult(PositionTradingResultRequest positionTradingResultRequest);
     }
 }

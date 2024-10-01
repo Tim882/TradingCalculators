@@ -34,6 +34,50 @@ namespace TradingCalculators.Calculators.Services
             return depositAmountResponse;
         }
 
+        /// <summary>
+        /// Метод расчета результата по позиции
+        /// </summary>
+        /// <param name="positionTradingResultRequest">Параметры для расчета</param>
+        /// <returns>Финансовый результат по позиции</returns>
+        public PositionTradingResultResponse CalculatePositionTradingResult(PositionTradingResultRequest positionTradingResultRequest)
+        {
+            PositionTradingResultResponse positionTradingResultResponse = new PositionTradingResultResponse();
+
+            double instrumentClosePrice = CalculatePercentChange(
+                positionTradingResultRequest.NumOfPoints,
+                positionTradingResultRequest.ChangePercent,
+                positionTradingResultRequest.IsLongPostion);
+
+            double openPrice = CalculatePositionPrice(
+                    positionTradingResultRequest.NumOfPoints,
+                    positionTradingResultRequest.NumOfLots,
+                    positionTradingResultRequest.PointPrice,
+                    positionTradingResultRequest.NumInLots);
+            double closePrice = CalculatePositionPrice(
+                    instrumentClosePrice,
+                    positionTradingResultRequest.NumOfLots,
+                    positionTradingResultRequest.PointPrice,
+                    positionTradingResultRequest.NumInLots);
+
+            if (positionTradingResultRequest.IsLongPostion)
+            {
+                openPrice *= -1;
+            }
+            else
+            {
+                closePrice *= -1;
+            }
+
+            double openPositionRate = CalculateRate(openPrice, positionTradingResultRequest.RatePercent);
+            double closePositionRate = CalculateRate(closePrice, positionTradingResultRequest.RatePercent);
+
+            double result = openPrice + closePrice - openPositionRate - closePositionRate;
+
+            positionTradingResultResponse.Result = result;
+
+            return positionTradingResultResponse;
+        }
+
         public TakeAndStopResponse CalculateTakeAndStop(TakeAndStopRequest takeAndStopRequest)
         {
             TakeAndStopResponse takeAndStopResponse = new TakeAndStopResponse();
@@ -75,6 +119,34 @@ namespace TradingCalculators.Calculators.Services
             {
                 return price - price * percent / 100;
             }
+        }
+
+        /// <summary>
+        /// Метод расчет стоимости позиции
+        /// </summary>
+        /// <param name="NumOfPoints">Стоимость инструмента в пунктах</param>
+        /// <param name="NumOfLots">Количество лотов</param>
+        /// <param name="PointPrice">Стоимость пункта цены</param>
+        /// <param name="NumInLots">Количество единиц инструмента в лоте</param>
+        /// <returns>Стоимость позиции</returns>
+        private double CalculatePositionPrice(double NumOfPoints, long NumOfLots, double PointPrice = 1, long NumInLots = 1)
+        {
+            double price = NumOfPoints * NumInLots * PointPrice * NumOfLots;
+
+            return price;
+        }
+
+        /// <summary>
+        /// Метод для рассчета комиссии при открытии/закрытии позиции
+        /// </summary>
+        /// <param name="price">Стоимость позиции</param>
+        /// <param name="ratePercent">Процент от позиции</param>
+        /// <returns></returns>
+        private double CalculateRate(double price, double ratePercent)
+        {
+            double rate = Math.Abs(price) * ratePercent / 100;
+
+            return rate;
         }
     }
 }

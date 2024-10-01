@@ -20,11 +20,21 @@ namespace TradingCalculators.Controllers
         /// <summary>
         /// Метод получения финансового результата по позиции
         /// </summary>
-        /// <returns></returns>
-        [HttpGet("/position/trading/result")]
-        public IActionResult PositionTradingResult()
+        /// <param name="positionTradingResultRequest">Параметры запроса</param>
+        /// <returns>Финансовый результат по позиции</returns>
+        [HttpPost("/position/trading/result")]
+        public IActionResult PositionTradingResult([FromBody] PositionTradingResultRequest positionTradingResultRequest)
         {
-            return NotFound();
+            try
+            {
+                PositionTradingResultResponse positionTradingResultResponse = _calculatorsDataService.CalculatePositionTradingResult(positionTradingResultRequest);
+                
+                return Ok(positionTradingResultResponse);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
         }
 
         /// <summary>
@@ -51,10 +61,17 @@ namespace TradingCalculators.Controllers
         /// Прогноз дохода за месяц (20 торговых дней) при заданных параметрах
         /// </summary>
         /// <returns></returns>
-        [HttpGet("/winrate/result")]
+        [HttpPost("/winrate/result")]
         public IActionResult WinrateResult()
         {
-            return NotFound();
+            try
+            {
+                return NotFound();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
         }
 
         /// <summary>
@@ -81,10 +98,17 @@ namespace TradingCalculators.Controllers
         /// Калькулятор среднего дохода в процентах при заданных тейках
         /// </summary>
         /// <returns></returns>
-        [HttpGet("/income/average")]
+        [HttpPost("/income/average")]
         public IActionResult CalculateAverage()
         {
-            return NotFound();
+            try
+            {
+                return NotFound();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
         }
     }
 }
