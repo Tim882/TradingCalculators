@@ -16,31 +16,12 @@ namespace TradingCalculators.Calculators.Services
 
             foreach (var take in averageFromTakesRequest.Takes)
             {
-                result += CalculateTakePrice(lotPrice * take.NumOfLots, take.ChangePercent, averageFromTakesRequest.IsLong);
+                result += CalculatePercentChange(lotPrice * take.NumOfLots, take.ChangePercent, averageFromTakesRequest.IsLong);
             }
 
             averageFromTakesResponse.ResultPercent = result / averageFromTakesRequest.PositionSum;
 
             return averageFromTakesResponse;
-        }
-
-        /// <summary>
-        /// Вычисляет новую цену по тейку
-        /// </summary>
-        /// <param name="price">Стоимость лотов инструмента</param>
-        /// <param name="percent">Процент изменения</param>
-        /// <param name="isLong">ЛОнговое ли изменение</param>
-        /// <returns></returns>
-        private double CalculateTakePrice(double price, double percent, bool isLong = true)
-        {
-            if (isLong)
-            {
-                return price + price * percent / 100;
-            }
-            else
-            {
-                return price - price * percent / 100;
-            }
         }
 
         public DepositAmountResponse CalculateDepositAmount(DepositAmountRequest depositAmountRequest)
@@ -68,6 +49,20 @@ namespace TradingCalculators.Calculators.Services
             depositAmountResponse.FinalDepositAmount = depositAmountResponse.DepositAmountStates.LastOrDefault()?.DepositAmount ?? 0;
 
             return depositAmountResponse;
+        }
+
+        public ProfitByWinrateResponse CalculateProfitByWinrate(ProfitByWinrateRequest profitByWinrateRequest)
+        {
+            ProfitByWinrateResponse profitByWinrateResponse = new ProfitByWinrateResponse();
+
+            var r = CalculatePercentChange(profitByWinrateRequest.Sum, profitByWinrateRequest.TakePercent);
+
+            double profit = Math.Abs(profitByWinrateRequest.Sum - CalculatePercentChange(profitByWinrateRequest.Sum, profitByWinrateRequest.TakePercent)) - profitByWinrateRequest.Sum * profitByWinrateRequest.RatePercent / 50;
+            double loss = Math.Abs(profitByWinrateRequest.Sum - CalculatePercentChange(profitByWinrateRequest.Sum, profitByWinrateRequest.StopPercent)) - profitByWinrateRequest.Sum * profitByWinrateRequest.RatePercent / 50;
+
+            profitByWinrateResponse.Profit = profit * profitByWinrateRequest.NumOfSuccessDeals - loss * profitByWinrateRequest.NumOfFailureDeals;
+
+            return profitByWinrateResponse;
         }
 
         /// <summary>
@@ -149,7 +144,7 @@ namespace TradingCalculators.Calculators.Services
         {
             if (isLong)
             {
-                return price * (1 + percent / 100);
+                return price + price * percent / 100;
             }
             else
             {

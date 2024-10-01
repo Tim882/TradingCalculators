@@ -29,5 +29,11 @@ namespace TradingCalculators.Calculators.Interfaces
         /// <param name="averageFromTakesRequest">Параметры для рассчета</param>
         /// <returns></returns>
         public AverageFromTakesResponse CalculateAverageFromTakes(AverageFromTakesRequest averageFromTakesRequest);
+        /// <summary>
+        /// Метод вычисления прибыли по винрейту
+        /// </summary>
+        /// <param name="profitByWinrateResponse">Параметры для рассчета</param>
+        /// <returns></returns>
+        public ProfitByWinrateResponse CalculateProfitByWinrate(ProfitByWinrateRequest profitByWinrateRequest);
     }
 }

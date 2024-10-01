@@ -62,11 +62,13 @@ namespace TradingCalculators.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpPost("/winrate/result")]
-        public IActionResult WinrateResult()
+        public IActionResult WinrateResult([FromBody] ProfitByWinrateRequest profitByWinrateRequest)
         {
             try
             {
-                return NotFound();
+                ProfitByWinrateResponse profitByWinrateResponse = _calculatorsDataService.CalculateProfitByWinrate(profitByWinrateRequest);
+
+                return Ok(profitByWinrateResponse);
             }
             catch (Exception ex)
             {
