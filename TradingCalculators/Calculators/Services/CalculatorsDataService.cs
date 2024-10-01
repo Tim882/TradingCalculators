@@ -24,7 +24,7 @@ namespace TradingCalculators.Calculators.Services
 
                 DepositAmountState depositAmountState = new DepositAmountState();
                 depositAmountState.Date = (DateTime)(lastDepositAmountState?.Date.AddMonths(1));
-                depositAmountState.DepositAmount = lastDepositAmountState.DepositAmount + lastDepositAmountState.DepositAmount * depositAmountRequest.Leverage * depositAmountRequest.DayDepositProfitPercent / 100 * 20;
+                depositAmountState.DepositAmount = depositAmountRequest.DepositReplenishment + lastDepositAmountState.DepositAmount + lastDepositAmountState.DepositAmount * depositAmountRequest.Leverage * depositAmountRequest.DayDepositProfitPercent / 100 * 20;
 
                 depositAmountResponse.DepositAmountStates.Add(depositAmountState);
             }

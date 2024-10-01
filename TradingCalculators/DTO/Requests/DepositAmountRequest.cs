@@ -22,5 +22,9 @@
         /// Прибыль в день на депозит в процентах
         /// </summary>
         public double DayDepositProfitPercent { get; set; } = 1;
+        /// <summary>
+        /// Сумма пополнения (если число отрицательное, то снятия)  депозита в месяц
+        /// </summary>
+        public double DepositReplenishment { get; set; } = 0;
     }
 }
