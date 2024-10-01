@@ -7,6 +7,42 @@ namespace TradingCalculators.Calculators.Services
 {
     public class CalculatorsDataService : ICalculatorsDataService
     {
+        public AverageFromTakesResponse CalculateAverageFromTakes(AverageFromTakesRequest averageFromTakesRequest)
+        {
+            AverageFromTakesResponse averageFromTakesResponse = new AverageFromTakesResponse();
+
+            double result = 0;
+            double lotPrice = averageFromTakesRequest.PositionSum / averageFromTakesRequest.NumOfLots;
+
+            foreach (var take in averageFromTakesRequest.Takes)
+            {
+                result += CalculateTakePrice(lotPrice * take.NumOfLots, take.ChangePercent, averageFromTakesRequest.IsLong);
+            }
+
+            averageFromTakesResponse.ResultPercent = result / averageFromTakesRequest.PositionSum;
+
+            return averageFromTakesResponse;
+        }
+
+        /// <summary>
+        /// Вычисляет новую цену по тейку
+        /// </summary>
+        /// <param name="price">Стоимость лотов инструмента</param>
+        /// <param name="percent">Процент изменения</param>
+        /// <param name="isLong">ЛОнговое ли изменение</param>
+        /// <returns></returns>
+        private double CalculateTakePrice(double price, double percent, bool isLong = true)
+        {
+            if (isLong)
+            {
+                return price + price * percent / 100;
+            }
+            else
+            {
+                return price - price * percent / 100;
+            }
+        }
+
         public DepositAmountResponse CalculateDepositAmount(DepositAmountRequest depositAmountRequest)
         {
             DepositAmountResponse depositAmountResponse = new DepositAmountResponse();

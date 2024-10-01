@@ -23,5 +23,11 @@ namespace TradingCalculators.Calculators.Interfaces
         /// <param name="positionTradingResultRequest"></param>
         /// <returns></returns>
         public PositionTradingResultResponse CalculatePositionTradingResult(PositionTradingResultRequest positionTradingResultRequest);
+        /// <summary>
+        /// Метод вычисления среднего результата в процентах по тейкам
+        /// </summary>
+        /// <param name="averageFromTakesRequest">Параметры для рассчета</param>
+        /// <returns></returns>
+        public AverageFromTakesResponse CalculateAverageFromTakes(AverageFromTakesRequest averageFromTakesRequest);
     }
 }

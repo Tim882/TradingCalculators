@@ -99,11 +99,13 @@ namespace TradingCalculators.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpPost("/income/average")]
-        public IActionResult CalculateAverage()
+        public IActionResult CalculateAverage([FromBody] AverageFromTakesRequest averageFromTakesRequest)
         {
             try
             {
-                return NotFound();
+                AverageFromTakesResponse averageFromTakesResponse = _calculatorsDataService.CalculateAverageFromTakes(averageFromTakesRequest);
+                
+                return Ok(averageFromTakesResponse);
             }
             catch (Exception ex)
             {
