@@ -58,7 +58,7 @@ namespace TradingCalculators.Calculators.Services
             var r = CalculatePercentChange(profitByWinrateRequest.Sum, profitByWinrateRequest.TakePercent);
 
             double profit = Math.Abs(profitByWinrateRequest.Sum - CalculatePercentChange(profitByWinrateRequest.Sum, profitByWinrateRequest.TakePercent)) - profitByWinrateRequest.Sum * profitByWinrateRequest.RatePercent / 50;
-            double loss = Math.Abs(profitByWinrateRequest.Sum - CalculatePercentChange(profitByWinrateRequest.Sum, profitByWinrateRequest.StopPercent)) - profitByWinrateRequest.Sum * profitByWinrateRequest.RatePercent / 50;
+            double loss = Math.Abs(profitByWinrateRequest.Sum - CalculatePercentChange(profitByWinrateRequest.Sum, profitByWinrateRequest.StopPercent)) + profitByWinrateRequest.Sum * profitByWinrateRequest.RatePercent / 50;
 
             profitByWinrateResponse.Profit = profit * profitByWinrateRequest.NumOfSuccessDeals - loss * profitByWinrateRequest.NumOfFailureDeals;
 
